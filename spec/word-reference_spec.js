@@ -1,4 +1,10 @@
-var wordReference = require("../src/word-reference");
+var wordReference = require("../word-reference");
+
+describe(".baseUrl", function() {
+  it("returns the base URL for the WordReference API", function() {
+    expect(wordReference.baseUrl).toEqual("http://api.wordreference.com/0.8/");
+  });
+});
 
 describe(".translate", function() {
   var stubXMLHttp = function(xmlHttpDouble) {
@@ -6,17 +12,20 @@ describe(".translate", function() {
     spyOn(xmlHttpDouble, "send");
     XMLHttpRequest = function() { return xmlHttpDouble };
   };
+  var options = { to: "en", from: "it", term: "malandrina" };
+  var apiKey = process.env.WORDREFERENCE_API_KEY;
 
   it("fetches translation from WordReference", function() {
     var xmlHttp = { open: true, send: true, responseText: "" };
     stubXMLHttp(xmlHttp);
-    var options = {
-      to: "en",
-      from: "it",
-      term: "malandrina"
-    }
     var dictionary = options.from + options.to;
-    var url = "http://api.wordreference.com/0.8/api-key/json/" + dictionary + "/" + options.term;
+    var url = [
+      wordReference.baseUrl,
+      apiKey,
+      "json",
+      dictionary,
+      options.term
+    ].join("/");
 
     wordReference.translate(options);
 
@@ -29,11 +38,6 @@ describe(".translate", function() {
     var responseText = "foo";
     var xmlHttp = { open: true, send: true, responseText: responseText };
     stubXMLHttp(xmlHttp);
-    var options = {
-      to: "en",
-      from: "it",
-      term: "malandrina"
-    }
     var dictionary = options.from + options.to;
 
     result = wordReference.translate(options);
