@@ -1,0 +1,25 @@
+{
+  "name": "word-reference",
+  "version": "1.0.0",
+  "description": "JavaScript wrapper for WordReference JSON API",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:malandrina/word-reference.js.git"
+  },
+  "keywords": [
+    "translation"
+  ],
+  "author": "Laila Winner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/malandrina/word-reference.js/issues"
+  },
+  "homepage": "https://github.com/malandrina/word-reference.js",
+  "devDependencies": {
+    "jasmine": "^2.3.1"
+  }
+}
