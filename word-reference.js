@@ -2,9 +2,9 @@
   var dotenv = dotenv || require("dotenv").load();
   var wordReference = wordReference || {};
 
-  wordReference.baseUrl = "http://api.wordreference.com/0.8/";
+  wordReference.baseUrl = "http://api.wordreference.com/0.8";
 
-  wordReference.translate = function(options) {
+  wordReference.translate = function(options, callback) {
     var dictionary = options.from + options.to;
     var apiKey = process.env.WORDREFERENCE_API_KEY;
     var format = "json";
@@ -16,10 +16,11 @@
       options.term
     ].join("/");
 
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", url, false);
-    xmlHttp.send(null);
-    return xmlHttp.responseText;
+    http.get(url, function(response) {
+      response.on("data", function(data) {
+        callback(JSON.parse(data));
+      });
+    });
   };
 
   module.exports = wordReference;
