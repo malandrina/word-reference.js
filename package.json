@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/malandrina/word-reference.js",
   "dependencies": {
-    "dotenv": "^1.1.0"
+    "dotenv": "^1.1.0",
+    "promise": "^7.0.1"
   },
   "devDependencies": {
     "jasmine": "^2.3.1"

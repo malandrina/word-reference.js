@@ -20,20 +20,25 @@ describe(".translate", function() {
         callback(response);
       }
     }
+  };
+
+  var stubSuccessfulRequest = function() {
+    stubHttp();
     spyOn(http, "get").and.callThrough();
   };
 
-  it("returns parsed response from WordReference API", function() {
-    var result;
-    var options = { to: "en", from: "it", term: "malandrina" };
-    var dictionary = options.from + options.to;
-    var handleResponse = function(requestResponse) {
-      result = requestResponse;
-    };
-    stubHttp();
+  describe("when request succeeds", function() {
+    it("returns translations from WordReference API", function() {
+      var options = { to: "en", from: "it", term: "malandrina" };
+      var dictionary = options.from + options.to;
+      var handleResponse = function(requestResponse) {
+        result = requestResponse;
+      };
+      stubSuccessfulRequest();
 
-    wordReference.translate(options, handleResponse);
-
-    expect(result).toEqual(JSON.parse(responseBody));
+      wordReference.translate(options).then(function(translations) {
+        expect(translations).toEqual(JSON.parse(responseBody));
+      });
+    });
   });
 });
