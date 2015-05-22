@@ -19,8 +19,14 @@
 
     var translationsPromise = new Promise(function(resolve, _reject) {
       http.get(url, function(response) {
+        var responseBody = "";
+        response.setEncoding("utf8");
         response.on("data", function(data) {
-          resolve(data);
+          responseBody += data;
+        });
+
+        response.on("end", function() {
+          resolve(JSON.parse(responseBody));
         });
       });
     });
