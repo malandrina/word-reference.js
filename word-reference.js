@@ -1,5 +1,6 @@
 (function() {
   var dotenv = dotenv || require("dotenv").load();
+  var http = require("http");
   var Promise = require("promise");
   var wordReference = wordReference || {};
 
