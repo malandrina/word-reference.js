@@ -18,7 +18,7 @@
       options.term
     ].join("/");
 
-    var translationsPromise = new Promise(function(resolve, _reject) {
+    var translationsPromise = new Promise(function(resolve, reject) {
       http.get(url, function(response) {
         var responseBody = "";
         response.setEncoding("utf8");
@@ -27,7 +27,11 @@
         });
 
         response.on("end", function() {
-          resolve(JSON.parse(responseBody));
+          if (response.statusCode === "500") {
+            reject();
+          } else {
+            resolve(JSON.parse(responseBody));
+          }
         });
       });
     });
