@@ -28,7 +28,8 @@
 
         response.on("end", function() {
           if (response.statusCode === 500) {
-            reject();
+            var error = new Error("Internal Server Error");
+            resolve({ errors: [error] });
           } else {
             resolve(JSON.parse(responseBody));
           }
