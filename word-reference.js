@@ -27,7 +27,7 @@
         });
 
         response.on("end", function() {
-          if (response.statusCode === "500") {
+          if (response.statusCode === 500) {
             reject();
           } else {
             resolve(JSON.parse(responseBody));
