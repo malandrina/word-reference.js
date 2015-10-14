@@ -14,3 +14,11 @@ wordReference.translate(options).then(function(translations) {
   result = translations;
 });
 ```
+
+### Development
+
+#### Running tests
+
+```
+$ make test
+```
