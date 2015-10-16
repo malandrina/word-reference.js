@@ -1,4 +1,6 @@
+var nock = require("nock");
 var wordReference = require("../word-reference");
+process.env.WORDREFERENCE_API_KEY = "api-key";
 
 describe(".baseUrl", function() {
   it("returns the base URL for the WordReference API", function() {
@@ -6,39 +8,57 @@ describe(".baseUrl", function() {
   });
 });
 
+describe(".url", function() {
+  it("returns a URL with the correct options", function() {
+    var from = "it";
+    var to = "en";
+    var term = "malandrina";
+    var apiKey = process.env.WORDREFERENCE_API_KEY;
+    var expectedUrl = "http://api.wordreference.com/0.8/api-key/json/iten/malandrina";
+
+    var url = wordReference.url({ from: from, to: to, term: term });
+
+    expect(url).toEqual(expectedUrl);
+  });
+});
+
 describe(".translate", function() {
-  var responseBody = '{ "foo": "bar" }';
-  var stubHttp = function() {
-    response = {
-      on: function(eventName, callback) {
-            callback(responseBody);
-          }
-
-    };
-    http = {
-      get: function(url, callback) {
-        callback(response);
-      }
-    }
-  };
-
-  var stubSuccessfulRequest = function() {
-    stubHttp();
-    spyOn(http, "get").and.callThrough();
-  };
-
   describe("when request succeeds", function() {
-    it("returns translations from WordReference API", function() {
+    it("returns translations", function(done) {
       var options = { to: "en", from: "it", term: "malandrina" };
       var dictionary = options.from + options.to;
-      var handleResponse = function(requestResponse) {
-        result = requestResponse;
-      };
-      stubSuccessfulRequest();
+      var result = { foo: "bar" };
+      var wordReferenceApi = nock("http://api.wordreference.com/0.8/api-key/json")
+        .get("/" + dictionary + "/" + options.term)
+        .reply(200, result);
 
-      wordReference.translate(options).then(function(translations) {
-        expect(translations).toEqual(JSON.parse(responseBody));
+      var translationsPromise = wordReference.translate(options);
+
+      translationsPromise.done(function(translations) {
+        expect(translations).toEqual(result);
+        done();
       });
+    });
+  });
+
+  describe("when request fails", function() {
+    it("returns errors", function(done) {
+      var options = { to: "en", from: "it", term: "malandrina" };
+      var dictionary = options.from + options.to;
+      var expectedErrors = { errors: ["Internal Server Error"] };
+      var wordReferenceApi = nock("http://api.wordreference.com/0.8/api-key/json")
+        .get("/" + dictionary + "/" + options.term)
+        .reply(500);
+
+      var translationsPromise = wordReference.translate(options);
+
+      translationsPromise.done(
+        function() { done(); },
+        function(errors) {
+          expect(errors).toEqual(expectedErrors);
+          done();
+        }
+      );
     });
   });
 });
