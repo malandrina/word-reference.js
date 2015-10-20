@@ -1,4 +1,3 @@
-var nock = require("nock");
 var wordReference = require("../word-reference");
 process.env.WORDREFERENCE_API_KEY = "api-key";
 
@@ -25,12 +24,14 @@ describe(".url", function() {
 describe(".getTranslations", function() {
   describe("when request succeeds", function() {
     it("returns translations", function(done) {
-      var options = { to: "en", from: "it", term: "malandrina" };
-      var dictionary = options.from + options.to;
       var result = { foo: "bar" };
-      var wordReferenceApi = nock("http://api.wordreference.com/0.8/api-key/json")
-        .get("/" + dictionary + "/" + options.term)
-        .reply(200, result);
+      var httpClient = {
+        get: function(url, callback) {
+          callback(null, { statusCode: 200 }, JSON.stringify(result));
+        }
+      };
+      wordReference.httpClient = httpClient;
+      var options = { to: "en", from: "it", term: "malandrina" };
 
       var translationsPromise = wordReference.getTranslations(options);
 
@@ -46,9 +47,13 @@ describe(".getTranslations", function() {
       var options = { to: "en", from: "it", term: "malandrina" };
       var dictionary = options.from + options.to;
       var expectedErrors = { errors: ["Internal Server Error"] };
-      var wordReferenceApi = nock("http://api.wordreference.com/0.8/api-key/json")
-        .get("/" + dictionary + "/" + options.term)
-        .reply(500);
+      var httpClient = {
+        get: function(url, callback) {
+          callback(null, { statusCode: 500 }, "");
+        }
+      };
+      wordReference.httpClient = httpClient;
+      var options = { to: "en", from: "it", term: "malandrina" };
 
       var translationsPromise = wordReference.getTranslations(options);
 

@@ -1,16 +1,18 @@
 (function() {
   var dotenv = dotenv || require("dotenv").load();
   var Promise = require("promise");
-  var request = require("request");
   var wordReference = wordReference || {};
 
   wordReference.baseUrl = "http://api.wordreference.com/0.8";
 
+  wordReference.httpClient = require("request");
+
   wordReference.getTranslations = function(options) {
     var translationsPromise = new Promise(function(resolve, reject) {
+      var httpClient = wordReference.httpClient;
       var url = wordReference.url(options);
 
-      request(url, function(error, response, body) {
+      httpClient.get(url, function(error, response, body) {
         if (response.statusCode === 500) {
           reject({ errors: ["Internal Server Error"] });
         } else {
