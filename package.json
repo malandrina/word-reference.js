@@ -21,7 +21,8 @@
   "homepage": "https://github.com/malandrina/word-reference.js",
   "dependencies": {
     "dotenv": "^1.1.0",
-    "promise": "^7.0.4"
+    "promise": "^7.0.4",
+    "request": "^2.65.0"
   },
   "devDependencies": {
     "jasmine": "^2.3.1",

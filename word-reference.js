@@ -1,7 +1,7 @@
 (function() {
   var dotenv = dotenv || require("dotenv").load();
-  var http = require("http");
   var Promise = require("promise");
+  var request = require("request");
   var wordReference = wordReference || {};
 
   wordReference.baseUrl = "http://api.wordreference.com/0.8";
@@ -9,18 +9,13 @@
   wordReference.getTranslations = function(options) {
     var translationsPromise = new Promise(function(resolve, reject) {
       var url = wordReference.url(options);
-      http.get(url, function(response) {
-        var responseBody = "";
-        response.setEncoding("utf8");
-        response.on("data", function(data) { responseBody += data; });
 
-        response.on("end", function() {
-          if (response.statusCode === 500) {
-            reject({ errors: ["Internal Server Error"] });
-          } else {
-            resolve(JSON.parse(responseBody));
-          }
-        });
+      request(url, function(error, response, body) {
+        if (response.statusCode == 500) {
+          reject({ errors: ["Internal Server Error"] });
+        } else {
+          resolve(JSON.parse(body));
+        }
       });
     });
 
