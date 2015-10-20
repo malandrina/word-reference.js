@@ -52,13 +52,10 @@ describe(".getTranslations", function() {
 
       var translationsPromise = wordReference.getTranslations(options);
 
-      translationsPromise.done(
-        function() { done(); },
-        function(errors) {
-          expect(errors).toEqual(expectedErrors);
-          done();
-        }
-      );
+      translationsPromise.catch(function(errors) {
+        expect(errors).toEqual(expectedErrors);
+        done();
+      });
     });
   });
 });

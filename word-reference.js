@@ -11,7 +11,7 @@
       var url = wordReference.url(options);
 
       request(url, function(error, response, body) {
-        if (response.statusCode == 500) {
+        if (response.statusCode === 500) {
           reject({ errors: ["Internal Server Error"] });
         } else {
           resolve(JSON.parse(body));
