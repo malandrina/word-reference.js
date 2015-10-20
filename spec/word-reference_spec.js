@@ -22,7 +22,7 @@ describe(".url", function() {
   });
 });
 
-describe(".translate", function() {
+describe(".getTranslations", function() {
   describe("when request succeeds", function() {
     it("returns translations", function(done) {
       var options = { to: "en", from: "it", term: "malandrina" };
@@ -32,7 +32,7 @@ describe(".translate", function() {
         .get("/" + dictionary + "/" + options.term)
         .reply(200, result);
 
-      var translationsPromise = wordReference.translate(options);
+      var translationsPromise = wordReference.getTranslations(options);
 
       translationsPromise.done(function(translations) {
         expect(translations).toEqual(result);
@@ -50,7 +50,7 @@ describe(".translate", function() {
         .get("/" + dictionary + "/" + options.term)
         .reply(500);
 
-      var translationsPromise = wordReference.translate(options);
+      var translationsPromise = wordReference.getTranslations(options);
 
       translationsPromise.done(
         function() { done(); },

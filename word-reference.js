@@ -6,7 +6,7 @@
 
   wordReference.baseUrl = "http://api.wordreference.com/0.8";
 
-  wordReference.translate = function(options) {
+  wordReference.getTranslations = function(options) {
     var translationsPromise = new Promise(function(resolve, reject) {
       var url = wordReference.url(options);
       http.get(url, function(response) {
