@@ -15,8 +15,6 @@ wordReference.getTranslations(options).then(function(translations) {
 });
 ```
 
-## Development
-
 ### Running tests
 
 ```
