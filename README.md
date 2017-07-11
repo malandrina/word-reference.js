@@ -4,7 +4,7 @@ word-reference.js
 An unpublished Node.js module for facilitating server-side interactions with the
 [WordReference JSON API](http://www.wordreference.com/docs/api.aspx).
 
-## Usage
+### Usage
 
 ```
 var wordReference = require("./word-reference");
@@ -15,7 +15,7 @@ wordReference.getTranslations(options).then(function(translations) {
 });
 ```
 
-## Running tests
+### Running tests
 
 ```
 $ make test
