@@ -46,10 +46,10 @@ describe(".getTranslations", function() {
     it("returns errors", function(done) {
       var options = { to: "en", from: "it", term: "malandrina" };
       var dictionary = options.from + options.to;
-      var expectedErrors = { errors: ["Internal Server Error"] };
+      var expectedError = "Internal Server Error";
       var httpClient = {
         get: function(url, callback) {
-          callback(null, { statusCode: 500 }, "");
+          callback(null, { statusCode: 500, error: expectedError }, "");
         }
       };
       wordReference.httpClient = httpClient;
@@ -57,8 +57,8 @@ describe(".getTranslations", function() {
 
       var translationsPromise = wordReference.getTranslations(options);
 
-      translationsPromise.catch(function(errors) {
-        expect(errors).toEqual(expectedErrors);
+      translationsPromise.catch(function(response) {
+        expect(response.errors).toEqual([expectedError]);
         done();
       });
     });
@@ -68,10 +68,10 @@ describe(".getTranslations", function() {
     it("returns errors", function(done) {
       var options = { to: "en", from: "it", term: "malandrina" };
       var dictionary = options.from + options.to;
-      var expectedErrors = { errors: ["Bad Request"] };
+      var expectedError = "Bad Request";
       var httpClient = {
         get: function(url, callback) {
-          callback(null, { statusCode: 400 }, "");
+          callback(null, { statusCode: 400, error: expectedError }, "");
         }
       };
       wordReference.httpClient = httpClient;
@@ -79,8 +79,8 @@ describe(".getTranslations", function() {
 
       var translationsPromise = wordReference.getTranslations(options);
 
-      translationsPromise.catch(function(errors) {
-        expect(errors).toEqual(expectedErrors);
+      translationsPromise.catch(function(response) {
+        expect(response.errors).toEqual([expectedError]);
         done();
       });
     });
