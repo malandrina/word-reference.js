@@ -65,13 +65,14 @@ describe(".getTranslations", function() {
   });
 
   describe("when request is malformed", function() {
-    it("returns errors", function(done) {
+    it("returns error response", function(done) {
       var options = { to: "en", from: "it", term: "malandrina" };
       var dictionary = options.from + options.to;
       var expectedError = "Bad Request";
+      var statusCode = 400;
       var httpClient = {
         get: function(url, callback) {
-          callback(null, { statusCode: 400, error: expectedError }, "");
+          callback(null, { statusCode: statusCode, error: expectedError }, "");
         }
       };
       wordReference.httpClient = httpClient;
@@ -80,6 +81,7 @@ describe(".getTranslations", function() {
       var translationsPromise = wordReference.getTranslations(options);
 
       translationsPromise.catch(function(response) {
+        expect(response.statusCode).toEqual(statusCode);
         expect(response.errors).toEqual([expectedError]);
         done();
       });
