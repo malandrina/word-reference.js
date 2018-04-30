@@ -42,7 +42,27 @@ describe(".getTranslations", function() {
     });
   });
 
-  describe("when request returns 500", function() {
+  describe("when request fails", function() {
+    it("returns status code", function(done) {
+      var options = { to: "en", from: "it", term: "malandrina" };
+      var dictionary = options.from + options.to;
+      var statusCode = 500;
+      var httpClient = {
+        get: function(url, callback) {
+          callback(null, { statusCode: statusCode, error: "Internal Server Error" }, "");
+        }
+      };
+      wordReference.httpClient = httpClient;
+      var options = { to: "en", from: "it", term: "malandrina" };
+
+      var translationsPromise = wordReference.getTranslations(options);
+
+      translationsPromise.catch(function(response) {
+        expect(response.statusCode).toEqual(statusCode);
+        done();
+      });
+    });
+
     it("returns errors", function(done) {
       var options = { to: "en", from: "it", term: "malandrina" };
       var dictionary = options.from + options.to;
@@ -58,30 +78,6 @@ describe(".getTranslations", function() {
       var translationsPromise = wordReference.getTranslations(options);
 
       translationsPromise.catch(function(response) {
-        expect(response.errors).toEqual([expectedError]);
-        done();
-      });
-    });
-  });
-
-  describe("when request is malformed", function() {
-    it("returns error response", function(done) {
-      var options = { to: "en", from: "it", term: "malandrina" };
-      var dictionary = options.from + options.to;
-      var expectedError = "Bad Request";
-      var statusCode = 400;
-      var httpClient = {
-        get: function(url, callback) {
-          callback(null, { statusCode: statusCode, error: expectedError }, "");
-        }
-      };
-      wordReference.httpClient = httpClient;
-      var options = { to: "en", from: "it", term: "malandrina" };
-
-      var translationsPromise = wordReference.getTranslations(options);
-
-      translationsPromise.catch(function(response) {
-        expect(response.statusCode).toEqual(statusCode);
         expect(response.errors).toEqual([expectedError]);
         done();
       });
