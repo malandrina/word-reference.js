@@ -14,9 +14,9 @@
 
       httpClient.get(url, function(error, response, body) {
         if (response.statusCode === 500) {
-          reject({ errors: ["Internal Server Error"] });
+          reject({ errors: [response.error] });
         } else if (response.statusCode === 400) {
-          reject({ errors: ["Bad Request"] });
+          reject({ errors: [response.error] });
         } else {
           resolve(JSON.parse(body));
         }
