@@ -12,7 +12,6 @@ describe(".url", function() {
     var from = "it";
     var to = "en";
     var term = "malandrina";
-    var apiKey = process.env.WORDREFERENCE_API_KEY;
     var expectedUrl = "http://api.wordreference.com/0.8/api-key/json/iten/malandrina";
 
     var url = wordReference.url({ from: from, to: to, term: term });
