@@ -25,7 +25,7 @@
   };
 
   wordReference.url = function(options) {
-    var dictionary = options.from + options.to;
+    var dictionary = options.from.concat(options.to);
     var apiKey = process.env.WORDREFERENCE_API_KEY;
     var format = "json";
     var url = [

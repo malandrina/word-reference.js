@@ -45,7 +45,7 @@ describe(".getTranslations", function() {
   describe("when request fails", function() {
     it("returns errors", function(done) {
       var options = { to: "en", from: "it", term: "malandrina" };
-      var dictionary = options.from + options.to;
+      var dictionary = options.from.concat(options.to);
       var expectedErrors = { errors: ["Internal Server Error"] };
       var httpClient = {
         get: function(url, callback) {
