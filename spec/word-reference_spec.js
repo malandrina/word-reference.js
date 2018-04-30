@@ -42,7 +42,7 @@ describe(".getTranslations", function() {
     });
   });
 
-  describe("when request fails", function() {
+  describe("when request returns 500", function() {
     it("returns errors", function(done) {
       var options = { to: "en", from: "it", term: "malandrina" };
       var dictionary = options.from + options.to;
@@ -50,6 +50,28 @@ describe(".getTranslations", function() {
       var httpClient = {
         get: function(url, callback) {
           callback(null, { statusCode: 500 }, "");
+        }
+      };
+      wordReference.httpClient = httpClient;
+      var options = { to: "en", from: "it", term: "malandrina" };
+
+      var translationsPromise = wordReference.getTranslations(options);
+
+      translationsPromise.catch(function(errors) {
+        expect(errors).toEqual(expectedErrors);
+        done();
+      });
+    });
+  });
+
+  describe("when request is malformed", function() {
+    it("returns errors", function(done) {
+      var options = { to: "en", from: "it", term: "malandrina" };
+      var dictionary = options.from + options.to;
+      var expectedErrors = { errors: ["Bad Request"] };
+      var httpClient = {
+        get: function(url, callback) {
+          callback(null, { statusCode: 400 }, "");
         }
       };
       wordReference.httpClient = httpClient;
