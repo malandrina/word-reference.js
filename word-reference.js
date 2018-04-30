@@ -13,7 +13,7 @@
       var url = wordReference.url(options);
 
       httpClient.get(url, function(error, response, body) {
-        if (response.statusCode === 500 || response.statusCode === 400) {
+        if (response.statusCode >= 400 && response.statusCode <= 599) {
           reject({ statusCode: response.statusCode, errors: [response.error] });
         } else {
           resolve(JSON.parse(body));
