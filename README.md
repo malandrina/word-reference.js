@@ -2,7 +2,8 @@ word-reference.js
 -------------------
 
 An unpublished Node.js module for facilitating server-side interactions with the
-[WordReference JSON API](http://www.wordreference.com/docs/api.aspx).
+[WordReference JSON API](http://www.wordreference.com/docs/api.aspx). Not under
+active development.
 
 ### Usage
 
